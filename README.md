@@ -62,24 +62,6 @@ Each segment supports:
 
 See `src/data/tutorial.ts` for the source types.
 
-## Deployment
-
-The Vite `base` path is configured as:
-
-```ts
-base: "/tutorial-video-companion/"
-```
-
-This is suitable for GitHub Pages-style deployments under a repository named `tutorial-video-companion`. If you deploy at a domain root or under a different path, update `base` in `vite.config.ts`.
-
-## Package Metadata
-
-Package metadata in `package.json` declares the MIT license, source repository, project homepage, and issue tracker:
-
-- Repository: https://github.com/georgebutler/tutorial-video-companion
-- Homepage: https://github.com/georgebutler/tutorial-video-companion#readme
-- Issues: https://github.com/georgebutler/tutorial-video-companion/issues
-
 ## License
 
 MIT. See `LICENSE`.

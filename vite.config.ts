@@ -9,7 +9,6 @@ const publicTutorialContentPath = path.resolve(__dirname, './src/content/public/
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/tutorial-video-companion/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
