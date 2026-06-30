@@ -41,8 +41,8 @@ type CueConfig = {
 
 type BlockBadgeType = TutorialCue | "show";
 
-const filePathPattern =
-  /\b(?:\.{1,2}\/|~\/|\/|[A-Za-z0-9_-]+\/)[A-Za-z0-9_./-]*[A-Za-z0-9_-]\.[A-Za-z0-9][A-Za-z0-9_-]*\b/g;
+const inlineCodePattern =
+  /(<[A-Z][^>]*>|@[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+|\bnpm run [A-Za-z0-9:_-]+\b|\brunInSpatialWeb\(\)|\b(?:requestAnimationFrame|entityTransform|DOMMatrix|Model3D|ModelRef|enable-xr|xr_main_scene|avp|dev|build|preview)\b|\b(?:\.{1,2}\/|~\/|\/|[A-Za-z0-9_-]+\/)[A-Za-z0-9_./-]*[A-Za-z0-9_-]\.[A-Za-z0-9][A-Za-z0-9_-]*\b)/g;
 
 const cueConfig: Record<TutorialCue, CueConfig> = {
   speak: {
@@ -108,12 +108,12 @@ function getBlockNoteItems(block: TutorialBlock): string[] {
   return [block.code];
 }
 
-function renderTextWithCodePaths(text: string): ReactNode {
+function renderTextWithInlineCode(text: string): ReactNode {
   const parts: ReactNode[] = [];
   let lastIndex = 0;
 
-  for (const match of text.matchAll(filePathPattern)) {
-    const filePath = match[0];
+  for (const match of text.matchAll(inlineCodePattern)) {
+    const code = match[0];
     const startIndex = match.index ?? 0;
 
     if (startIndex > lastIndex) {
@@ -122,14 +122,14 @@ function renderTextWithCodePaths(text: string): ReactNode {
 
     parts.push(
       <code
-        key={`${filePath}-${startIndex}`}
+        key={`${code}-${startIndex}`}
         className="bg-muted px-1 py-0.5 font-mono text-[0.9em] text-foreground"
       >
-        {filePath}
+        {code}
       </code>
     );
 
-    lastIndex = startIndex + filePath.length;
+    lastIndex = startIndex + code.length;
   }
 
   if (lastIndex === 0) return text;
@@ -179,7 +179,7 @@ function TextList({
     >
       {items.map((item) => (
         <li key={item} className="break-words">
-          {renderTextWithCodePaths(item)}
+          {renderTextWithInlineCode(item)}
         </li>
       ))}
     </ul>
@@ -209,7 +209,7 @@ function CodeBlock({ code, label }: { code: string; label: CodeBlockLabel }) {
   }
 
   return (
-    <div className="overflow-hidden border border-slate-800 bg-slate-950 text-slate-50">
+    <div className="overflow-hidden rounded-sm border border-slate-800 bg-slate-950 text-slate-50">
       <div className="flex items-center justify-between gap-3 border-b border-slate-800 px-3 py-2">
         <span className="text-xs font-medium uppercase tracking-wide text-slate-300">
           {label}
@@ -251,7 +251,9 @@ export function TutorialBlockCard({
     >
       <div className="mb-2 flex flex-wrap items-center gap-2">
         {badgeType ? <CueBadge type={badgeType} /> : null}
-        <h3 className="text-[13px] font-medium leading-5 text-muted-foreground">{block.title}</h3>
+        {!badgeType ? (
+          <h3 className="text-[13px] font-medium leading-5 text-muted-foreground">{block.title}</h3>
+        ) : null}
       </div>
       {"paragraphs" in block ? (
         <div
@@ -264,7 +266,7 @@ export function TutorialBlockCard({
         >
           {block.paragraphs.map((paragraph) => (
             <p key={paragraph} className="break-words">
-              “{renderTextWithCodePaths(paragraph)}”
+              “{renderTextWithInlineCode(paragraph)}”
             </p>
           ))}
         </div>
@@ -401,14 +403,6 @@ export function TutorialSegmentCard({
               <Badge variant="secondary" className="tabular-nums shadow-none">
                 {segment.timeRange}
               </Badge>
-              {segment.priority === "key" ? (
-                <Badge
-                  variant="outline"
-                  className="border-amber-500/40 bg-amber-100 text-amber-900 shadow-none"
-                >
-                  Key pattern — do not cut
-                </Badge>
-              ) : null}
               {segment.priority === "optional" ? (
                 <Badge variant="outline" className="border-slate-300 bg-slate-100 text-slate-700 shadow-none">
                   Optional — skip if long
@@ -418,9 +412,8 @@ export function TutorialSegmentCard({
             <h2 className="break-words text-2xl font-semibold leading-tight tracking-tight sm:text-[1.625rem]">
               {segment.title}
             </h2>
-            <p className="text-sm leading-6 text-muted-foreground">{segment.goal}</p>
           </div>
-          <label className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 border bg-background px-3 text-sm font-medium shadow-none">
+          <label className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-sm border bg-background px-3 text-sm font-medium shadow-none">
             <input
               type="checkbox"
               checked={checked}
@@ -492,7 +485,7 @@ export function RecordingCompanion({
               {completedSegments} of {totalSegments} complete
             </CardDescription>
           </div>
-          <span className="shrink-0 border bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
+          <span className="shrink-0 rounded-sm border bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
             {progressPercent}%
           </span>
         </div>
@@ -504,7 +497,7 @@ export function RecordingCompanion({
           aria-valuemin={0}
           aria-valuemax={totalSegments}
           aria-valuenow={completedSegments}
-          className="h-1.5 overflow-hidden bg-secondary"
+          className="h-1.5 overflow-hidden rounded-sm bg-secondary"
         >
           <div
             className="h-full bg-primary transition-all"
@@ -512,7 +505,7 @@ export function RecordingCompanion({
           />
         </div>
         {activeSegment ? (
-          <section className="border bg-muted/40 p-3" aria-labelledby="active-segment-title">
+          <section className="rounded-sm border bg-muted/40 p-3" aria-labelledby="active-segment-title">
             <p className="text-[0.7rem] font-medium uppercase tracking-wide text-muted-foreground">
               Now recording
             </p>
@@ -557,7 +550,7 @@ export function RecordingCompanion({
                 <span className="flex min-w-0 items-start gap-2">
                   <span
                     className={cn(
-                      "mt-0.5 flex size-5 shrink-0 items-center justify-center border text-[0.65rem] leading-none",
+                      "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-sm border text-[0.65rem] leading-none",
                       isComplete
                         ? "border-primary/30 bg-primary/10 text-primary"
                         : "border-border bg-background text-muted-foreground"
