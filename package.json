@@ -3,6 +3,14 @@
   "version": "0.0.0",
   "description": "A React companion app for organizing, recording, and tracking tutorial video scripts.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/georgebutler/tutorial-video-companion.git"
+  },
+  "homepage": "https://github.com/georgebutler/tutorial-video-companion#readme",
+  "bugs": {
+    "url": "https://github.com/georgebutler/tutorial-video-companion/issues"
+  },
   "keywords": [
     "tutorial",
     "video",

@@ -26,7 +26,7 @@ Open the local Vite URL shown in your terminal.
 
 - `npm run dev` — start the Vite development server.
 - `npm run lint` — run the TypeScript build check.
-- `npm run build` — run linting and create a production build.
+- `npm run build` — run the TypeScript build check and create a production build.
 - `npm run preview` — preview the production build locally.
 
 ## Content Workflow
@@ -74,9 +74,12 @@ This is suitable for GitHub Pages-style deployments under a repository named `tu
 
 ## Package Metadata
 
-This package intentionally does not include repository or homepage URLs yet. Add them to `package.json` once the public GitHub repository URL is known.
+Package metadata in `package.json` declares the MIT license, source repository, project homepage, and issue tracker:
+
+- Repository: https://github.com/georgebutler/tutorial-video-companion
+- Homepage: https://github.com/georgebutler/tutorial-video-companion#readme
+- Issues: https://github.com/georgebutler/tutorial-video-companion/issues
 
 ## License
 
 MIT. See `LICENSE`.
-

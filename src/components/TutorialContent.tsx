@@ -209,23 +209,23 @@ function CodeBlock({ code, label }: { code: string; label: CodeBlockLabel }) {
   }
 
   return (
-    <div className="overflow-hidden border bg-muted/40">
-      <div className="flex items-center justify-between gap-3 border-b px-3 py-2">
-        <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+    <div className="overflow-hidden border border-slate-800 bg-slate-950 text-slate-50">
+      <div className="flex items-center justify-between gap-3 border-b border-slate-800 px-3 py-2">
+        <span className="text-xs font-medium uppercase tracking-wide text-slate-300">
           {label}
         </span>
         <Button
           type="button"
           variant="outline"
           size="sm"
-          className="h-8 shadow-none"
+          className="h-8 border-slate-600 bg-slate-900 text-slate-50 shadow-none hover:bg-slate-800 hover:text-white"
           onClick={handleCopy}
           aria-label={`Copy ${label.toLowerCase()}`}
         >
           {copied ? "Copied" : "Copy"}
         </Button>
       </div>
-      <pre className="max-h-56 overflow-auto p-3 text-xs leading-6 text-foreground sm:text-sm">
+      <pre className="max-h-56 overflow-auto p-3 text-xs leading-6 text-slate-50 sm:text-sm">
         <code className="block whitespace-pre font-mono">{code}</code>
       </pre>
     </div>
